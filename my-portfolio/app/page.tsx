@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { TerminalSquare, ExternalLink, Github, Linkedin, Mail, ArrowRight } from "lucide-react";
+import Typewriter from "@/components/ui/Typewriter";
 
 const fade = {
   initial: { opacity: 0, y: 8 },
@@ -48,9 +49,15 @@ function Hero() {
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px]" />
       <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
         <motion.h1 {...fade} className="text-3xl sm:text-6xl font-extrabold leading-tight">
-          Building fast, thoughtful software
-          <br className="hidden sm:block" />
-          with a calm, monochrome vibe.
+          Building
+          {" "}
+          <Typewriter
+            words={["fast, thoughtful software", "clean UX that feels calm", "small tools with big impact"]}
+            className="inline"
+            typingMs={60}
+            deletingMs={40}
+            holdMs={1000}
+          />
         </motion.h1>
         <motion.p {...fade} transition={{ ...fade.transition, delay: 0.1 }} className="mt-4 max-w-2xl text-neutral-400">
           I’m Cecila — full-stack developer (React/Next, Java Spring, Python) who loves clean UX, smart automations, and
