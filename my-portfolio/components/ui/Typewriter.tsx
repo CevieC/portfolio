@@ -68,7 +68,7 @@ export default function Typewriter({
   return (
     <span className={className} aria-live="polite" aria-label={safeWords[wordIndex % safeWords.length]}>
       {text}
-      <span className={cursorClassName || "ml-1 inline-block w-[1ch] animate-pulse"}>|</span>
+      <span className={cursorClassName || "ml-1 inline-block w-[1ch] align-baseline cursor-blink"}>|</span>
     </span>
   );
 }

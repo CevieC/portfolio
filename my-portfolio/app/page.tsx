@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { TerminalSquare, ExternalLink, Github, Linkedin, Mail, ArrowRight } from "lucide-react";
 import Typewriter from "@/components/ui/Typewriter";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const fade = {
   initial: { opacity: 0, y: 8 },
@@ -48,12 +49,17 @@ function Hero() {
       {/* subtle grid */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px]" />
       <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-        <motion.h1 {...fade} className="text-3xl sm:text-6xl font-extrabold leading-tight">
-          Building
-          {" "}
+        <motion.h1
+          {...fade}
+          className="text-3xl sm:text-6xl font-extrabold leading-tight overflow-hidden min-h-[6.5rem] sm:min-h-[9.5rem]"
+        >
           <Typewriter
-            words={["fast, thoughtful software", "clean UX that feels calm", "small tools with big impact"]}
-            className="inline"
+            words={[
+              "Turning ideas into code that actually ships",
+              "Climbing walls, solving problems — both need grip",
+              "Ctrl+C my snacks, Ctrl+V my energy",
+            ]}
+            className="inline break-words"
             typingMs={60}
             deletingMs={40}
             holdMs={1000}
@@ -71,12 +77,12 @@ function Hero() {
           >
             Explore work <ArrowRight className="h-4 w-4" />
           </a>
-          <a
+          <MagneticButton
             href="/cecibot/terminal"
             className="inline-flex items-center gap-2 rounded-xl border border-neutral-700 px-4 py-2 text-sm font-semibold hover:bg-neutral-900"
           >
             <TerminalSquare className="h-4 w-4" /> Chat with CeciBot
-          </a>
+          </MagneticButton>
         </div>
       </div>
     </section>
@@ -122,7 +128,7 @@ function Work() {
     },
   ];
   return (
-    <section id="work" className="mx-auto max-w-6xl px-4 py-16">
+    <section id="work" className="mx-auto max-w-6xl px-4 py-16 mt-16 sm:mt-24">
       <div className="flex items-end justify-between">
         <h2 className="text-2xl sm:text-3xl font-bold">Selected work</h2>
         <span className="text-xs text-neutral-500">(more on GitHub)</span>
