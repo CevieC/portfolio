@@ -1,17 +1,23 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import * as motion from "motion/react-client";
+import type { Variants } from "motion/react";
 import { TerminalSquare, ExternalLink, Github, Linkedin, Mail, ArrowRight, FileText } from "lucide-react";
 import Typewriter from "@/components/ui/Typewriter";
 import InteractiveButton from "@/components/ui/InteractiveButton";
 import Constellation from "@/components/ui/Constellation";
 import TerminalModal from "@/components/cecibot/TerminalModal";
 
+// Animation variants
 const fade = {
   initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5 },
 };
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
 
 export default function HomePage() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
@@ -32,15 +38,20 @@ export default function HomePage() {
   );
 }
 
+// ============================================================================
+// LAYOUT COMPONENTS
+// ============================================================================
+
+// Header component with navigation
 function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-900/80 backdrop-blur bg-neutral-950/70">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <div className="text-sm tracking-wide text-neutral-400">Ceci // Portfolio</div>
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#work" className="text-neutral-400 hover:text-neutral-200">Work</a>
-          <a href="#stack" className="text-neutral-400 hover:text-neutral-200">Stack</a>
-          <a href="#notes" className="text-neutral-400 hover:text-neutral-200">Notes</a>
+          <a href="#work" className="text-neutral-400 hover:text-neutral-200">Side Quests</a>
+          <a href="#stack" className="text-neutral-400 hover:text-neutral-200">Inventory</a>
+          <a href="#notes" className="text-neutral-400 hover:text-neutral-200">Scrolls</a>
           <a href="#contact" className="text-neutral-400 hover:text-neutral-200">Contact</a>
           <button 
             onClick={onOpenTerminal}
@@ -54,6 +65,7 @@ function Header({ onOpenTerminal }: { onOpenTerminal: () => void }) {
   );
 }
 
+// Hero section with typewriter effect
 function Hero({ onOpenTerminal }: { onOpenTerminal: () => void }) {
   return (
     <section className="relative overflow-hidden">
@@ -104,6 +116,7 @@ function Hero({ onOpenTerminal }: { onOpenTerminal: () => void }) {
   );
 }
 
+// Container for all main sections
 function Sections() {
   return (
     <>
@@ -114,15 +127,9 @@ function Sections() {
   );
 }
 
+// Side Quests section with project cards
 function Work() {
   const projects = [
-    {
-      title: "Seika OS — Trader Copilot",
-      tag: "AI / Crypto / UX",
-      blurb:
-        "My attempt to make trading less stressful than my climbing projects. Conversational agent with token analysis and on-chain helpers.",
-      href: "https://github.com/your/seikaos2",
-    },
     {
       title: "Typing Simulator",
       tag: "Web • Frontend",
@@ -135,41 +142,115 @@ function Work() {
       blurb: "The app that finally made me show up to meetings on time. Drag-and-drop with keyboard shortcuts.",
       href: "https://github.com/your/calendar-planner",
     },
-    {
-      title: "Boulder Buddy",
-      tag: "Sports • Fun",
-      blurb: "My climbing log that's more organized than my code comments. Suggests drills and recovery plans.",
-      href: "https://github.com/your/boulder-buddy",
-    },
   ];
+
+  const cardVariants: Variants = {
+    offscreen: {
+      y: 100,
+      opacity: 0,
+      scale: 0.9,
+    },
+    onscreen: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        bounce: 0.3,
+        duration: 0.8,
+      },
+    },
+  };
+
+  const containerVariants: Variants = {
+    offscreen: {
+      opacity: 0,
+    },
+    onscreen: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
   return (
-    <section id="work" className="mx-auto max-w-6xl px-4 py-16 mt-16 sm:mt-24">
-      <div className="flex items-end justify-between">
-        <h2 className="text-2xl sm:text-3xl font-bold">Selected work</h2>
-        <span className="text-xs text-neutral-500">(more on GitHub)</span>
-      </div>
-      <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((p) => (
-          <a
+    <section id="work" className="mx-auto max-w-6xl px-4 py-8 mt-8 sm:mt-16 scroll-mt-12">
+      <motion.h2 
+        className="text-2xl sm:text-3xl font-bold mb-6"
+        initial={{ opacity: 0, x: -30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ 
+          type: "spring",
+          bounce: 0.3,
+          duration: 0.6 
+        }}
+        viewport={{ amount: 0.5 }}
+      >
+        Side Quests
+      </motion.h2>
+      <motion.div 
+        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        variants={containerVariants}
+        initial="offscreen"
+        whileInView="onscreen"
+        viewport={{ amount: 0.3 }}
+      >
+        {projects.map((p, index) => (
+          <motion.a
             key={p.title}
             href={p.href}
             target="_blank"
             rel="noreferrer"
-            className="group relative rounded-xl border border-neutral-800 bg-neutral-900 p-5 hover:border-neutral-700 hover:-translate-y-0.5 transition"
+            className="group relative rounded-xl border border-neutral-800 bg-neutral-900 p-5 hover:border-neutral-700 transition-colors duration-300 overflow-hidden"
+            variants={cardVariants}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: {
+                type: "spring",
+                bounce: 0.2,
+                duration: 0.3,
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
           >
-            <div className="flex items-center justify-between gap-4">
-              <div className="font-semibold text-neutral-100 group-hover:text-white">{p.title}</div>
-              <ExternalLink className="h-4 w-4 text-neutral-500 group-hover:text-neutral-300" />
-            </div>
-            <div className="mt-2 text-xs uppercase tracking-wide text-neutral-500">{p.tag}</div>
-            <p className="mt-3 text-sm text-neutral-400">{p.blurb}</p>
-          </a>
+            <motion.div 
+              className="flex items-center justify-between gap-4"
+              whileHover={{ x: 5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="font-semibold text-neutral-100 group-hover:text-white transition-colors duration-300">{p.title}</div>
+              <motion.div
+                whileHover={{ rotate: 15, scale: 1.1 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ExternalLink className="h-4 w-4 text-neutral-500 group-hover:text-neutral-300 transition-colors duration-300" />
+              </motion.div>
+            </motion.div>
+            <motion.div 
+              className="mt-2 text-xs uppercase tracking-wide text-neutral-500"
+              whileHover={{ x: 5 }}
+              transition={{ duration: 0.2 }}
+            >
+              {p.tag}
+            </motion.div>
+            <motion.p 
+              className="mt-3 text-sm text-neutral-400"
+              whileHover={{ x: 5 }}
+              transition={{ duration: 0.2 }}
+            >
+              {p.blurb}
+            </motion.p>
+          </motion.a>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
+// Inventory section with tech stack
 function Stack() {
   const items = [
     { k: "Frontend", v: "React / Next.js, Tailwind, Framer Motion (and a lot of patience)" },
@@ -177,54 +258,198 @@ function Stack() {
     { k: "Data & AI", v: "Python, Pandas, LLMs, RAG, Vector DBs (making AI do cool things)" },
     { k: "Automation", v: "Excel/VBA power-user, scripts, ETL (because manual work is so 2010)" },
   ];
+
+  const itemVariants: Variants = {
+    offscreen: {
+      y: 100,
+      opacity: 0,
+      scale: 0.9,
+    },
+    onscreen: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        bounce: 0.3,
+        duration: 0.8,
+      },
+    },
+  };
+
+  const containerVariants: Variants = {
+    offscreen: {
+      opacity: 0,
+    },
+    onscreen: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
   return (
-    <section id="stack" className="mx-auto max-w-6xl px-4 py-16">
-      <h2 className="text-2xl sm:text-3xl font-bold">Stack</h2>
-      <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {items.map((it) => (
-          <div key={it.k} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-            <div className="text-xs uppercase tracking-wider text-neutral-500">{it.k}</div>
-            <div className="mt-2 text-sm text-neutral-300">{it.v}</div>
-          </div>
+    <section id="stack" className="mx-auto max-w-6xl px-4 py-8 mt-2 sm:mt-4 scroll-mt-12">
+      <motion.h2 
+        className="text-2xl sm:text-3xl font-bold mb-6"
+        initial={{ opacity: 0, y: -20, scale: 0.9 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ 
+          type: "spring",
+          bounce: 0.4,
+          duration: 0.7 
+        }}
+        viewport={{ amount: 0.5 }}
+      >
+        Inventory
+      </motion.h2>
+      <motion.div 
+        className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch"
+        variants={containerVariants}
+        initial="offscreen"
+        whileInView="onscreen"
+        viewport={{ amount: 0.3 }}
+      >
+        {items.map((it, index) => (
+          <motion.div 
+            key={it.k} 
+            className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700 transition-colors duration-300 cursor-pointer group h-full"
+            variants={itemVariants}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: {
+                type: "spring",
+                bounce: 0.2,
+                duration: 0.3,
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
+            style={{ willChange: 'transform' }}
+          >
+            <motion.div 
+              className="text-xs uppercase tracking-wider text-neutral-500"
+              whileHover={{ x: 3 }}
+              transition={{ duration: 0.2 }}
+            >
+              {it.k}
+            </motion.div>
+            <motion.div 
+              className="mt-2 text-sm text-neutral-300"
+              whileHover={{ x: 3 }}
+              transition={{ duration: 0.2 }}
+            >
+              {it.v}
+            </motion.div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
 
+// Ancient Scrolls section with personal insights
 function Notes() {
   const notes = [
     {
-      title: "Small tools, big leverage",
-      blurb: "Why I build small tools instead of giant platforms (and why you should too).",
-      href: "#",
+      title: "Why I Even Do This",
+      blurb: "Honestly, I just like turning random ideas into things people can actually use. It's fun seeing something go from a silly thought in my head to a real project I can click on. I don't care about making it flashy, I just want it to work smooth and feel nice."
     },
     {
-      title: "RAG without the drama",
-      blurb: "A pragmatic setup for personal sites and side projects. No over-engineering here.",
-      href: "#",
+      title: "Climb Brain",
+      blurb: "Bouldering is basically me arguing with a wall until I figure it out. Most of the time I fall, but that's kind of the point. Every fail shows me a better way to do it. Feels the same as debugging, just with more chalk and less coffee."
     },
     {
-      title: "Clean terminals for the web",
-      blurb: "Designing monochrome UIs that feel calm, not sterile. Because black and white can be fun too.",
-      href: "#",
+      title: "Powered by Food",
+      blurb: "I climb a lot which means I eat a lot. Post-climb dinners, late-night coding snacks, random bread cravings. It's all part of the cycle. Food is honestly half the reason I keep going."
     },
   ];
+
+
+
   return (
-    <section id="notes" className="mx-auto max-w-6xl px-4 py-16">
-      <h2 className="text-2xl sm:text-3xl font-bold">Notes</h2>
-      <div className="mt-6 grid md:grid-cols-3 gap-4">
-        {notes.map((n) => (
-          <a key={n.title} href={n.href} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700">
-            <div className="font-semibold">{n.title}</div>
-            <p className="mt-2 text-sm text-neutral-400">{n.blurb}</p>
-          </a>
-        ))}
-      </div>
+    <section id="notes" className="mx-auto max-w-6xl px-4 py-8 mt-2 sm:mt-4 scroll-mt-12">
+      <motion.h2 
+        className="text-2xl sm:text-3xl font-bold mb-6"
+        initial={{ opacity: 0, y: -30, rotateZ: -2 }}
+        whileInView={{ opacity: 1, y: 0, rotateZ: 0 }}
+        transition={{ 
+          type: "spring",
+          bounce: 0.5,
+          duration: 0.8 
+        }}
+        viewport={{ amount: 0.5 }}
+      >
+        Ancient Scrolls
+      </motion.h2>
+      <motion.div 
+        className="grid md:grid-cols-3 gap-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ amount: 0.3 }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.2,
+              delayChildren: 0.1,
+            },
+          },
+        }}
+      >
+        {notes.map((n, index) => (
+          <motion.div 
+            key={n.title} 
+            className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700 transition-colors duration-300 cursor-pointer group"
+            variants={{
+              hidden: { opacity: 0, y: 100, scale: 0.9 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                transition: {
+                  type: "spring",
+                  bounce: 0.3,
+                  duration: 0.8,
+                },
+              },
+            }}
+            whileHover={{
+              y: -8,
+              scale: 1.02,
+              transition: {
+                type: "spring",
+                bounce: 0.2,
+                duration: 0.3,
+              }
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <motion.div 
+              className="font-semibold text-neutral-100 group-hover:text-white transition-colors duration-300"
+              whileHover={{ x: 3 }}
+              transition={{ duration: 0.2 }}
+            >
+              {n.title}
+            </motion.div>
+            <motion.p 
+              className="mt-2 text-sm text-neutral-400"
+              whileHover={{ x: 3 }}
+              transition={{ duration: 0.2 }}
+            >
+              {n.blurb}
+            </motion.p>
+          </motion.div>
+                ))}
+      </motion.div>
     </section>
   );
 }
 
+// Contact section with call-to-action
 function CTA({ onOpenTerminal }: { onOpenTerminal: () => void }) {
   return (
     <section id="contact" className="mx-auto max-w-6xl px-4 py-20">
@@ -243,6 +468,7 @@ function CTA({ onOpenTerminal }: { onOpenTerminal: () => void }) {
   );
 }
 
+// Footer component
 function Footer() {
   return (
     <footer className="mx-auto max-w-6xl px-4 pb-16 text-xs text-neutral-500">
