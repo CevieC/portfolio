@@ -2,26 +2,26 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-type MagneticButtonProps = {
-  href: string;
+type InteractiveButtonProps = {
+  onClick: () => void;
   className?: string;
   children: React.ReactNode;
   maxTranslate?: number; // px
   scale?: number; // hover scale
 };
 
-export default function MagneticButton({
-  href,
+export default function InteractiveButton({
+  onClick,
   className,
   children,
   maxTranslate = 10,
   scale = 1.03,
-}: MagneticButtonProps) {
-  const ref = useRef<HTMLAnchorElement | null>(null);
+}: InteractiveButtonProps) {
+  const ref = useRef<HTMLButtonElement | null>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
 
-  function onMove(e: React.MouseEvent<HTMLAnchorElement>) {
+  function onMove(e: React.MouseEvent<HTMLButtonElement>) {
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -36,9 +36,9 @@ export default function MagneticButton({
   }
 
   return (
-    <motion.a
+    <motion.button
       ref={ref}
-      href={href}
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
@@ -52,8 +52,6 @@ export default function MagneticButton({
       className={className}
     >
       {children}
-    </motion.a>
+    </motion.button>
   );
 }
-
-

@@ -4,10 +4,9 @@ import type { Line, ChatMsg } from "@/lib/types";
 import { askCeci } from "@/lib/cecibot";
 
 const BOOT: Line[] = [
-  { role: "sys", text: "CeciOS v0.3.7 — build 0925" },
-  { role: "sys", text: "System initialized successfully." },
-  { role: "sys", text: "Persona: Cecila Chew loaded." },
-  { role: "sys", text: "Type 'help' for commands." },
+  { role: "sys", text: "Terminal v1.0.0" },
+  { role: "sys", text: "Connected to Cecila's AI assistant." },
+  { role: "sys", text: "Type 'help' for available commands." },
 ];
 
 export function useCeciChat() {
@@ -26,7 +25,12 @@ export function useCeciChat() {
       print(`$ ${cmd}`, "user");
 
       if (["help", "?"].includes(cmd)) {
-        print("Commands: help, clear, about, theme, ask <question>", "sys");
+        print("Available commands:", "sys");
+        print("  help     - Show this help", "sys");
+        print("  clear    - Clear terminal", "sys");
+        print("  about    - About this assistant", "sys");
+        print("  theme    - Toggle theme", "sys");
+        print("  <question> - Ask me anything", "sys");
         return;
       }
       if (cmd === "clear") {
@@ -34,7 +38,8 @@ export function useCeciChat() {
         return;
       }
       if (cmd === "about") {
-        print("CeciBot answers in Cecila's style: concise, modern, friendly.", "sys");
+        print("I'm Cecila's AI assistant. I can help you with questions about her work,", "sys");
+        print("experience, or anything else you'd like to know.", "sys");
         return;
       }
       if (cmd === "theme") {
